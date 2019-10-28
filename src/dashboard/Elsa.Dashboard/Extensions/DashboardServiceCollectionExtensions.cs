@@ -29,7 +29,7 @@ namespace Elsa.Dashboard.Extensions
         {
             var configuration = new ElsaBuilder(services);
 
-            services.AddControllersWithViews();
+            services.AddMvc();
             configuration.WithElsaDashboard();
             configure?.Invoke(configuration);
 
