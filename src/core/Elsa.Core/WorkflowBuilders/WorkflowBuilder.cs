@@ -81,6 +81,7 @@ namespace Elsa.WorkflowBuilders
             var activityDescriptor = ActivityDescriber.Describe<T>();
             
             activity.Name = name;
+            activityBuilder.Name = name;
             activityBuilder.DisplayName = activityDescriptor.DisplayName;
             activityBuilder.Description = activityDescriptor.Description;
             activityBuilders.Add(activityBuilder);
