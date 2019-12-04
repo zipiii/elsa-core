@@ -18,7 +18,15 @@
         <RepositoryUrl>https://github.com/elsa-workflows/elsa-core</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
         <PackageTags>elsa, workflows, http</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="icon.png">
+            <Pack>True</Pack>
+            <PackagePath />
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\core\Elsa.Core\Elsa.Core.csproj" />
@@ -27,12 +35,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="LanguageExt.Core" Version="3.3.29" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="3.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="3.0.1" />
     </ItemGroup>
 
 </Project>

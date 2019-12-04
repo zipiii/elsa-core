@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,12 +11,12 @@ namespace Elsa.Persistence.Memory
     public class MemoryWorkflowInstanceStore : IWorkflowInstanceStore
     {
         private readonly IDictionary<string, WorkflowInstance> workflowInstances =
-            new Dictionary<string, WorkflowInstance>();
+            new ConcurrentDictionary<string, WorkflowInstance>();
 
-        public Task SaveAsync(WorkflowInstance instance, CancellationToken cancellationToken)
+        public Task<WorkflowInstance> SaveAsync(WorkflowInstance instance, CancellationToken cancellationToken)
         {
             workflowInstances[instance.Id] = instance;
-            return Task.CompletedTask;
+            return Task.FromResult(instance);
         }
 
         public Task<WorkflowInstance> GetByIdAsync(string id, CancellationToken cancellationToken)
@@ -51,7 +52,7 @@ namespace Elsa.Persistence.Memory
             var query = workflowInstances.Values.AsQueryable();
 
             query = query.Where(x => x.Status == WorkflowStatus.Executing);
-            
+
             if (!string.IsNullOrWhiteSpace(correlationId))
                 query = query.Where(x => x.CorrelationId == correlationId);
 
@@ -63,7 +64,7 @@ namespace Elsa.Persistence.Memory
         }
 
         public Task<IEnumerable<WorkflowInstance>> ListByStatusAsync(
-            string definitionId, 
+            string definitionId,
             WorkflowStatus status,
             CancellationToken cancellationToken)
         {

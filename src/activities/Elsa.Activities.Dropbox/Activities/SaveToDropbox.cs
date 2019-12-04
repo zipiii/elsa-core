@@ -4,7 +4,6 @@ using Elsa.Activities.Dropbox.Models;
 using Elsa.Activities.Dropbox.Services;
 using Elsa.Attributes;
 using Elsa.Expressions;
-using Elsa.Extensions;
 using Elsa.Results;
 using Elsa.Services;
 using Elsa.Services.Models;
@@ -18,12 +17,10 @@ namespace Elsa.Activities.Dropbox.Activities
     public class SaveToDropbox : Activity
     {
         private readonly IFilesApi filesApi;
-        private readonly IWorkflowExpressionEvaluator expressionEvaluator;
 
-        public SaveToDropbox(IFilesApi filesApi, IWorkflowExpressionEvaluator expressionEvaluator)
+        public SaveToDropbox(IFilesApi filesApi)
         {
             this.filesApi = filesApi;
-            this.expressionEvaluator = expressionEvaluator;
         }
 
         [ActivityProperty(Hint = "An expression evaluating to a byte array to store.")]
@@ -44,8 +41,8 @@ namespace Elsa.Activities.Dropbox.Activities
             WorkflowExecutionContext context,
             CancellationToken cancellationToken)
         {
-            var data = await expressionEvaluator.EvaluateAsync(DataExpression, context, cancellationToken);
-            var path = await expressionEvaluator.EvaluateAsync(PathExpression, context, cancellationToken);
+            var data = await context.EvaluateAsync(DataExpression, cancellationToken);
+            var path = await context.EvaluateAsync(PathExpression, cancellationToken);
 
             await filesApi.UploadAsync(
                 new UploadRequest

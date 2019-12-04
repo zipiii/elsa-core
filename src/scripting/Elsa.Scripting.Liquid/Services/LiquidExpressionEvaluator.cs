@@ -28,12 +28,13 @@ namespace Elsa.Scripting.Liquid.Services
         {
             var templateContext = await CreateTemplateContextAsync(workflowExecutionContext);
             var result = await liquidTemplateManager.RenderAsync(expression, templateContext);
-            return string.IsNullOrWhiteSpace(result) ? default : Convert.ChangeType(result, type);
+            return string.IsNullOrWhiteSpace(result) ? default : type != null ? Convert.ChangeType(result, type) : result;
         }
 
         private async Task<TemplateContext> CreateTemplateContextAsync(WorkflowExecutionContext workflowContext)
         {
             var context = new TemplateContext();
+            context.SetValue("WorkflowExecutionContext", workflowContext);
             await mediator.Publish(new EvaluatingLiquidExpression(context, workflowContext));
             context.Model = workflowContext;
             return context;

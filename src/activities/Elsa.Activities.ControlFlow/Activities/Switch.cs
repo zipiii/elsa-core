@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Elsa.Attributes;
@@ -21,10 +23,14 @@ namespace Elsa.Activities.ControlFlow.Activities
     {
         private readonly IWorkflowExpressionEvaluator expressionEvaluator;
 
+
         public Switch(IWorkflowExpressionEvaluator expressionEvaluator)
         {
             this.expressionEvaluator = expressionEvaluator;
-            Cases = new List<string>();
+            Cases = new List<string>()
+            {
+                "default"
+            };
         }
 
         [ActivityProperty(Hint = "The expression to evaluate. The evaluated value will be used to switch on.")]
@@ -46,7 +52,15 @@ namespace Elsa.Activities.ControlFlow.Activities
             CancellationToken cancellationToken)
         {
             var result = await expressionEvaluator.EvaluateAsync(Expression, workflowContext, cancellationToken);
-            return Outcome(result);
+
+            if (ContainsCase(result) || !ContainsCase("default"))
+                return Outcome(result);
+
+            Output.SetVariable("Result", result);
+
+            return Outcome("default");
         }
+
+        private bool ContainsCase(string @case) => Cases.Contains(@case, StringComparer.OrdinalIgnoreCase);
     }
 }

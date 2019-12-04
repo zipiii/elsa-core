@@ -3,6 +3,9 @@
 [![Nuget](https://img.shields.io/nuget/v/Elsa)](https://www.nuget.org/packages/Elsa/)
 [![MyGet (with prereleases)](https://img.shields.io/myget/elsa/vpre/Elsa.Core.svg?label=myget)](https://www.myget.org/gallery/elsa)
 [![Build status](https://ci.appveyor.com/api/projects/status/rqg10opfpy78yiga/branch/develop?svg=true)](https://ci.appveyor.com/project/sfmskywalker/elsa/branch/develop)
+[![Gitter](https://badges.gitter.im/elsa-workflows/community.svg)](https://gitter.im/elsa-workflows/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Stack Overflow questions](https://img.shields.io/badge/stackoverflow-elsa_workflows-orange.svg)]( http://stackoverflow.com/questions/tagged/elsa-workflows )
+![Docker Pulls](https://img.shields.io/docker/pulls/elsaworkflows/elsa-dashboard?label=elsa%20dashboard%3Adocker%20pulls)
 
 Elsa Core is a workflows library that enables workflow execution in any .NET Core application.
 Workflows can be defined not only using code but also as JSON, YAML or XML.
@@ -137,7 +140,7 @@ Although there's an effort being made to [port WF to .NET Standard](https://gith
 
 ### What about Orchard Workflows?
 
-Both [Orchard](http://docs.orchardproject.net/en/latest/Documentation/Workflows/) and [Orchard Core](https://orchardcore.readthedocs.io/en/dev/OrchardCore.Modules/OrchardCore.Workflows/) ship with a powerful workflows module, and both are awesome.
+Both [Orchard](http://docs.orchardproject.net/en/latest/Documentation/Workflows/) and [Orchard Core](https://orchardcore.readthedocs.io/en/dev/docs/reference/modules/Workflows/) ship with a powerful workflows module, and both are awesome.
 In fact, Elsa Workflows is taken & adapted from Orchard Core's Workflows module. Elsa uses a similar model, but there are some differences:  
 
 - Elsa Workflows is completely decoupled from web, whereas Orchard Core Workflows is coupled to not only the web, but also the Orchard Core Framework itself.

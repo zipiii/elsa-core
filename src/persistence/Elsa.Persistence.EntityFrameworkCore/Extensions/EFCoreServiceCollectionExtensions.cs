@@ -1,6 +1,7 @@
 using System;
 using Elsa.AutoMapper.Extensions;
 using Elsa.AutoMapper.Extensions.NodaTime;
+using Elsa.Persistence.EntityFrameworkCore.DbContexts;
 using Elsa.Persistence.EntityFrameworkCore.Mapping;
 using Elsa.Persistence.EntityFrameworkCore.Services;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +23,8 @@ namespace Elsa.Persistence.EntityFrameworkCore.Extensions
                 services.AddDbContext<ElsaContext>(configureOptions);
 
             services
-                .AddAutoMapperProfile<InstantProfile>(ServiceLifetime.Singleton)
-                .AddAutoMapperProfile<DocumentProfile>(ServiceLifetime.Singleton);
+                .AddAutoMapperProfile<NodaTimeProfile>(ServiceLifetime.Singleton)
+                .AddAutoMapperProfile<EntitiesProfile>(ServiceLifetime.Singleton);
 
             return new EntityFrameworkCoreElsaBuilder(configuration.Services);
         }
@@ -39,8 +40,7 @@ namespace Elsa.Persistence.EntityFrameworkCore.Extensions
                 .AddWorkflowInstanceStore();
         }
 
-        public static EntityFrameworkCoreElsaBuilder AddWorkflowInstanceStore(
-            this EntityFrameworkCoreElsaBuilder configuration)
+        public static EntityFrameworkCoreElsaBuilder AddWorkflowInstanceStore(this EntityFrameworkCoreElsaBuilder configuration)
         {
             configuration.Services
                 .AddScoped<IWorkflowInstanceStore, EntityFrameworkCoreWorkflowInstanceStore>();
@@ -48,8 +48,7 @@ namespace Elsa.Persistence.EntityFrameworkCore.Extensions
             return configuration;
         }
 
-        public static EntityFrameworkCoreElsaBuilder AddWorkflowDefinitionStore(
-            this EntityFrameworkCoreElsaBuilder configuration)
+        public static EntityFrameworkCoreElsaBuilder AddWorkflowDefinitionStore(this EntityFrameworkCoreElsaBuilder configuration)
         {
             configuration.Services
                 .AddScoped<IWorkflowDefinitionStore, EntityFrameworkCoreWorkflowDefinitionStore>();

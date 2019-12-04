@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Elsa.Models
 {
-    public class Variables : Dictionary<string, object>
+    public class Variables : Dictionary<string, Variable>
     {
         public static readonly Variables Empty = new Variables();
 
@@ -10,31 +10,41 @@ namespace Elsa.Models
         {
         }
 
-        public Variables(Variables other) : this((IEnumerable<KeyValuePair<string, object>>) other)
+        public Variables(Variables other) : this((IEnumerable<KeyValuePair<string, Variable>>) other)
         {
         }
 
+        public Variables(IEnumerable<KeyValuePair<string, Variable>> dictionary)
+        {
+            foreach (var item in dictionary)
+                this[item.Key] = item.Value;
+        }
+        
         public Variables(IEnumerable<KeyValuePair<string, object>> dictionary)
         {
             foreach (var item in dictionary)
-            {
-                this[item.Key] = item.Value;
-            }
+                SetVariable(item.Key, item.Value);
         }
 
         public object GetVariable(string name)
         {
-            return ContainsKey(name) ? this[name] : null;
+            return ContainsKey(name) ? this[name].Value : default;
         }
 
-        public T GetVariable<T>(string name)
+        public T GetVariable<T>(string name) => (T) GetVariable(name);
+
+        public Variable SetVariable(string name, object value)
         {
-            return ContainsKey(name) ? (T) this[name] : default(T);
+            return this[name] = new Variable(value);
         }
 
-        public bool HasVariable(string name, object value)
+        public void SetVariables(Variables variables) =>
+            SetVariables((IEnumerable<KeyValuePair<string, Variable>>) variables);
+
+        public void SetVariables(IEnumerable<KeyValuePair<string, Variable>> variables)
         {
-            return ContainsKey(name) && this[name].Equals(value);
+            foreach (var variable in variables)
+                SetVariable(variable.Key, variable.Value);
         }
 
         public bool HasVariable(string name)

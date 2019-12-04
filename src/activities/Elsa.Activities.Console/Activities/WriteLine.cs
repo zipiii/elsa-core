@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Elsa.Attributes;
 using Elsa.Expressions;
-using Elsa.Extensions;
 using Elsa.Results;
 using Elsa.Services;
 using Elsa.Services.Models;
@@ -16,19 +15,18 @@ namespace Elsa.Activities.Console.Activities
     [ActivityDefinition(
         Category = "Console",
         Description = "Write text to standard out.",
+        Icon = "fas fa-terminal",
         RuntimeDescription = "x => !!x.state.textExpression ? `Write <strong>${ x.state.textExpression.expression }</strong> to standard out.` : x.definition.description",
         Outcomes = new[] { OutcomeNames.Done }
     )]
     public class WriteLine : Activity
     {
-        public WriteLine(IWorkflowExpressionEvaluator evaluator)
-            : this(evaluator, System.Console.Out)
+        public WriteLine() : this(System.Console.Out)
         {
         }
-
-        public WriteLine(IWorkflowExpressionEvaluator evaluator, TextWriter output)
+        
+        public WriteLine(TextWriter output)
         {
-            this.evaluator = evaluator;
             this.output = output;
         }
 
@@ -38,13 +36,12 @@ namespace Elsa.Activities.Console.Activities
             get => GetState(() => LiteralEvaluator.Expression<string>(null));
             set => SetState(value);
         }
-
-        private readonly IWorkflowExpressionEvaluator evaluator;
+        
         private readonly TextWriter output;
 
         protected override async Task<ActivityExecutionResult> OnExecuteAsync(WorkflowExecutionContext context, CancellationToken cancellationToken)
         {
-            var text = await evaluator.EvaluateAsync(TextExpression, context, cancellationToken);
+            var text = await context.EvaluateAsync(TextExpression, cancellationToken);
             await output.WriteLineAsync(text);
             return Outcome(OutcomeNames.Done);
         }

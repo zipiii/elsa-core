@@ -14,7 +14,15 @@
         <RepositoryUrl>https://github.com/elsa-workflows/elsa-core</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
         <PackageTags>elsa, workflows, mongodb</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="icon.png">
+            <Pack>True</Pack>
+            <PackagePath />
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\core\Elsa.Core\Elsa.Core.csproj" />
@@ -22,7 +30,7 @@
 
     <ItemGroup>
       <PackageReference Include="MongoDb.Bson.NodaTime" Version="2.0.0" />
-      <PackageReference Include="MongoDB.Driver" Version="2.9.2" />
+      <PackageReference Include="MongoDB.Driver" Version="2.9.3" />
     </ItemGroup>
 
 </Project>

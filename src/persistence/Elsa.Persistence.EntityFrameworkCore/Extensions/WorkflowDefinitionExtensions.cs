@@ -1,20 +1,20 @@
 using System.Linq;
 using Elsa.Models;
-using Elsa.Persistence.EntityFrameworkCore.Documents;
+using Elsa.Persistence.EntityFrameworkCore.Entities;
 
 namespace Elsa.Persistence.EntityFrameworkCore.Extensions
 {
     public static class WorkflowDefinitionDocumentExtensions
     {
-        public static IQueryable<WorkflowDefinitionVersionDocument> WithVersion(
-            this IQueryable<WorkflowDefinitionVersionDocument> query,
+        public static IQueryable<WorkflowDefinitionVersionEntity> WithVersion(
+            this IQueryable<WorkflowDefinitionVersionEntity> query,
             VersionOptions version)
         {
 
             if (version.IsDraft)
                 query = query.Where(x => !x.IsPublished);
             else if (version.IsLatest)
-                query = query.OrderByDescending(x => x.Version);
+                query = query.Where(x => x.IsLatest);
             else if (version.IsPublished)
                 query = query.Where(x => x.IsPublished);
             else if (version.IsLatestOrPublished)

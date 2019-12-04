@@ -5,7 +5,6 @@ using Elsa.Expressions;
 using Elsa.Extensions;
 using Elsa.Models;
 using Elsa.Results;
-using Elsa.Scripting.JavaScript;
 using Elsa.Scripting.JavaScript.Services;
 using Elsa.Services;
 using Elsa.Services.Models;
@@ -62,7 +61,7 @@ namespace Elsa.Activities.Workflows.Activities
             var input = (await expressionEvaluator.EvaluateAsync(Input, context, cancellationToken)) ?? new Variables();
             var correlationId = await expressionEvaluator.EvaluateAsync(CorrelationId, context, cancellationToken);
 
-            input["Signal"] = signal;
+            input.SetVariable("Signal", signal);
 
             await workflowInvoker.TriggerAsync(
                 nameof(Signaled),

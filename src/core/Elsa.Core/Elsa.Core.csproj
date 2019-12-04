@@ -16,7 +16,15 @@
         <RepositoryUrl>https://github.com/elsa-workflows/elsa-core</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
         <PackageTags>elsa, workflows, orchard</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="icon.png">
+            <Pack>True</Pack>
+            <PackagePath />
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="9.0.0" />
@@ -25,14 +33,14 @@
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
         <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.2.0" />
         <PackageReference Include="Elsa.Scrutor" Version="3.0.2.26" />
 

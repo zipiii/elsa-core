@@ -15,14 +15,13 @@ namespace Elsa.Activities.MassTransit.Activities
         DisplayName = "Send MassTransit Message",
         Description = "Send a message via MassTransit."
     )]
-    public class SendMassTransitMessage : Activity
+    public class SendMassTransitMessage : MassTransitBusActivity
     {
-        private readonly ISendEndpointProvider sender;
         private readonly IWorkflowExpressionEvaluator evaluator;
 
-        public SendMassTransitMessage(ISendEndpointProvider sender, IWorkflowExpressionEvaluator evaluator)
+        public SendMassTransitMessage(ConsumeContext consumeContext, IBus bus, IWorkflowExpressionEvaluator evaluator)
+            : base(bus, consumeContext)
         {
-            this.sender = sender;
             this.evaluator = evaluator;
         }
 
@@ -44,6 +43,17 @@ namespace Elsa.Activities.MassTransit.Activities
             set => SetState(value);
         }
 
+        [ActivityProperty(Hint = "The address of a specific endpoint to send the message to.")]
+        public Uri EndpointAddress
+        {
+            get
+            {
+                var endpointAddress = GetState<string>();
+                return string.IsNullOrEmpty(endpointAddress) ? null : new Uri(endpointAddress);
+            }
+            set => SetState(value.ToString());
+        }
+
         protected override bool OnCanExecute(WorkflowExecutionContext context)
         {
             return MessageType != null;
@@ -53,7 +63,16 @@ namespace Elsa.Activities.MassTransit.Activities
             CancellationToken cancellationToken)
         {
             var message = await evaluator.EvaluateAsync(Message, MessageType, context, cancellationToken);
-            await sender.Send(message, cancellationToken);
+
+            if (EndpointAddress != null)
+            {
+                var endpoint = await SendEndpointProvider.GetSendEndpoint(EndpointAddress);
+                await endpoint.Send(message, cancellationToken);
+            }
+            else
+            {
+                await SendEndpointProvider.Send(message, cancellationToken);
+            }
 
             return Done();
         }

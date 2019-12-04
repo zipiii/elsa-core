@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Elsa.Activities.Http.Extensions;
 using Elsa.Activities.Http.Models;
 using Elsa.Activities.Http.Services;
 using Elsa.Attributes;
@@ -37,14 +36,14 @@ namespace Elsa.Activities.Http.Activities
         }
 
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IEnumerable<IContentFormatter> contentFormatters;
+        private readonly IEnumerable<IHttpRequestBodyParser> parsers;
 
         public ReceiveHttpRequest(
             IHttpContextAccessor httpContextAccessor,
-            IEnumerable<IContentFormatter> contentFormatters)
+            IEnumerable<IHttpRequestBodyParser> parsers)
         {
             this.httpContextAccessor = httpContextAccessor;
-            this.contentFormatters = contentFormatters;
+            this.parsers = parsers;
         }
 
         /// <summary>
@@ -105,28 +104,18 @@ namespace Elsa.Activities.Http.Activities
 
             if (ReadContent)
             {
-                if (request.HasFormContentType)
-                {
-                    model.Form = (await request.ReadFormAsync(cancellationToken)).ToDictionary(
-                        x => x.Key,
-                        x => new StringValuesModel(x.Value)
-                    );
-                }
-
                 var parser = SelectContentParser(request.ContentType);
-                var content = await request.ReadContentAsBytesAsync(cancellationToken);
-                model.Body = await parser.ParseAsync(content, request.ContentType);
+                model.Body = await parser.ParseAsync(request, cancellationToken);
             }
 
-            Output["Content"] = model;
-            workflowContext.CurrentScope.LastResult = model;
+            workflowContext.CurrentScope.LastResult = Output.SetVariable("Content", model);
 
             return Done();
         }
 
-        private IContentFormatter SelectContentParser(string contentType)
+        private IHttpRequestBodyParser SelectContentParser(string contentType)
         {
-            var formatters = contentFormatters.OrderByDescending(x => x.Priority).ToList();
+            var formatters = parsers.OrderByDescending(x => x.Priority).ToList();
             return formatters.FirstOrDefault(
                        x => x.SupportedContentTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase)
                    ) ?? formatters.Last();
